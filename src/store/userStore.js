@@ -13,20 +13,10 @@ const userStore =create((set,get)=>({
 	setError:(val)=>set({error:val}),
 	setSelectedUser:(user)=>{
 		set({selectedUser: user})},
-	createNewUser:async(name,email,level,memo,image)=>{ // admin에서 직접 생성하는 user
+	
+	updateUser:async(userId, level, memo, image,failNo, notSubmitNo)=>{
 		try{
-			const resp = await api.post('/user/new', {name,email,level,memo,image})
-			set({
-				selectedUser: resp.data.data,
-				userUpdated: !get().userUpdated
-			})
-		}catch(e){
-			console.log(e.error)
-		}
-	},
-	updateUser:async(userId, level, memo, image)=>{
-		try{
-			const resp = await api.put('/user', {userId,level,memo, image})
+			const resp = await api.put('/user/update', {userId,level,failNo, notSubmitNo})
 			set({
 				selectedUser: resp.data.data,
 				userUpdated: !get().userUpdated
@@ -40,7 +30,7 @@ const userStore =create((set,get)=>({
 			delete searchQuery.name;
 		}
 		try{
-			const resp = await api.get('/user', {params:{...searchQuery}})
+			const resp = await api.get('/user/list', {params:{...searchQuery}})
 			set({
 				userList: resp.data.data,
 				totalUserCount:resp.data.data?.length
@@ -58,12 +48,9 @@ const userStore =create((set,get)=>({
 		try{
 			const resp = await api.get('/user/me')
 			const u = resp.data.user
-			const credit = u.credit
-			const coupon = u.coupon
+			
 			set({
 				user: u,
-				credit: credit,
-				coupon: coupon
 			})
 		} catch(e){
 			console.log('e.error:', e.error)
@@ -81,12 +68,9 @@ const userStore =create((set,get)=>({
 			console.log('resp', resp)
 			const u = resp.data.user
 			const t = resp.data.token
-			const credit = u.credit
-			const coupon = u.coupon
+			
 			set({
 				user: u,
-				credit: credit,
-				coupon: coupon
 			})
 			sessionStorage.setItem('token',t)
 		} catch(e){
@@ -94,8 +78,9 @@ const userStore =create((set,get)=>({
 			set({error: e.error})
 		}
 	},
-	logout:()=> {   
+	logout:(navigate)=> {   
 		sessionStorage.clear()
+		navigate('/') //로그인으로 라우팅
 		set({user:null})
 	},
 	loginWithGoogle: async (token)=>{
@@ -103,12 +88,8 @@ const userStore =create((set,get)=>({
 			const resp = await api.post('/user/google', {token})
 			const u = resp.data.user
 			const t = resp.data.token
-			const credit = u.credit
-			const coupon = u.coupon
 			set({
-				user: u,
-				credit: credit,
-				coupon: coupon
+				user: u
 			})
 			sessionStorage.setItem('token',t)
 		}catch(e){
@@ -123,7 +104,7 @@ const userStore =create((set,get)=>({
 			// set({user: resp.data.data})
 		
 			set({userUpdated: !get().userUpdated})
-			navigate('/login')
+			navigate('/') //루트가 로그인이다.
 
 		}catch(e){
 			console.log(e.error)

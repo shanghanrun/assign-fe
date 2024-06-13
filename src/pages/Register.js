@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
-import { useNavigate } from "react-router";
-import "../style/register.style.css";
+import { useNavigate } from "react-router-dom";
 import userStore from '../store/userStore'
 
-const RegisterPage = () => {
-  const {user, error, registerUser} = userStore()
+const Register = () => {
+  const {error, registerUser} = userStore()
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -128,4 +127,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default Register;

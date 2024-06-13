@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import userStore from '../store/userStore'
-import "../style/login.style.css";
 import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
@@ -29,7 +28,7 @@ const Login = () => {
   useEffect(() => {
     setError(false)//기존 에러를 초기화
     if (user) {
-      navigate("/");
+      navigate("/home");
     }
   }, [user]);
 
