@@ -10,7 +10,7 @@ import cc from './../utils/cc';
 
 const AssignPage=()=>{
 	const {user} = userStore()
-	const {assignList, getAssignList, setSelectedAssign,selectedAssign} = assignStore()
+	const {updated, assignList, weekOne, weekTwo, weekThree, weekFour, getAssignList, setSelectedAssign,selectedAssign} = assignStore()
 	console.log('AssignPage assignList :', assignList)
 	const [open, setOpen] = useState(false)
 	const [assignOpen, setAssignOpen] =useState(false)
@@ -25,7 +25,7 @@ const AssignPage=()=>{
 
 	useEffect(()=>{
 		getAssignList()
-	},[])
+	},[updated])
 	useEffect(()=>{
 		console.log('assignOpen상태:', assignOpen)
 	},[assignOpen])
@@ -39,6 +39,7 @@ const AssignPage=()=>{
 	}
 
 	const openEditForm = (assign) => {
+		if(user.level === 'customer') return
 		setOpen(true);
 		setSelectedAssign(assign)
 	};
@@ -57,16 +58,44 @@ const AssignPage=()=>{
 				
 				<div>
 					<h5>1주차</h5>
-					
 					<AssignTable
 						header={tableHeader}
-						data={assignList}
+						data={weekOne}
 						openEditForm={openEditForm}
 					/>
+					<div style={{height: '10px'}}></div>
+				</div>
+				<div>
+					<h5>2주차</h5>
+					<AssignTable
+						header={tableHeader}
+						data={weekTwo}
+						openEditForm={openEditForm}
+					/>
+					<div style={{height: '10px'}}></div>
+				</div>
+				<div>
+					<h5>3주차</h5>
+					<AssignTable
+						header={tableHeader}
+						data={weekThree}
+						openEditForm={openEditForm}
+					/>
+					<div style={{height: '10px'}}></div>
+				</div>
+				<div>
+					<h5>4주차</h5>
+					<AssignTable
+						header={tableHeader}
+						data={weekFour}
+						openEditForm={openEditForm}
+					/>
+					<div style={{height: '10px'}}></div>
 				</div>
 				
 			</Container>
 			{open && <AssignDialog open={open} handleClose={handleClose} />}
+
 		</div>
 	)
 }

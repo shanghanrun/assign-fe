@@ -1,7 +1,11 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Table, Badge, Button } from "react-bootstrap";
+import ReportDialog from "./ReportDialog";
 const AssignTable = ({ header, data, openEditForm }) => {
-  console.log('ScheduleTable이 받은 data', data)
+  const [showReport, setShowReport] = useState(false)
+
+  const today = new Date().toISOString().split('T')[0];  // 2024-06-12 형태로
+  console.log('today :', today)
 
   const renderSubmitColumn = (submitValue) => {
     if (submitValue === '제출하기') {
@@ -23,6 +27,12 @@ const AssignTable = ({ header, data, openEditForm }) => {
       return assignTypeValue;
     }
   };
+  const handleShowReport=()=>{
+    setShowReport(true)
+  }
+  const handleCloseReport =()=>{
+    setShowReport(false)
+  }
 
   return (
     <div className="overflow-x">
@@ -36,20 +46,33 @@ const AssignTable = ({ header, data, openEditForm }) => {
         </thead>
         <tbody>
           {data && data.length > 0 ? (
-            data.map((item, index) => (
-              <tr key={index} onClick={() => openEditForm(item)}>
-                <th>{item.dueDate}</th>
-                <th>{item.lecture}</th>
-                <th>{renderAssignTypeColumn(item.assignType)}</th>
-                <th>{item.status}</th>
-                <th>{renderSubmitColumn(item.submit)}</th>
-                <th>{item.feedback}</th>
-			  </tr>	
-				))
+            data.map((item, index) => {
+              const isDueToday = item.dueDate === today;
+              const rowClassName = isDueToday ? 'bg-yellow' : '';
+              return (
+                <tr
+                  key={index}
+                  onClick={() => openEditForm(item)}
+                  className={rowClassName}
+                >
+                  <th className={rowClassName}>{item.dueDate}</th>
+                  <th className={rowClassName}>{item.lecture}</th>
+                  <th className={rowClassName}>{renderAssignTypeColumn(item.assignType)}</th>
+                  <th className={rowClassName}>{item.status}</th>
+                  <th className={rowClassName}
+                    onClick={handleShowReport}
+                  >{renderSubmitColumn(item.submit)}</th>
+                  <th className={rowClassName}>{item.feedback}</th>
+                  {showReport && <ReportDialog
+                    assign={item} 
+                    open={showReport} handleClose={handleCloseReport}/>}
+                </tr>
+              );
+            })
           ) : (
-			<tr>
-				<td colSpan={header.length} style={{ textAlign: "center" }}>No Data to show</td>
-			</tr>
+            <tr>
+              <td colSpan={header.length}>No data available</td>
+            </tr>
           )}
         </tbody>
       </Table>
