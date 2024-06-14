@@ -1,6 +1,5 @@
 import {create} from 'zustand'
 import api from '../utils/api'
-// import cartStore from './cartStore' 
 
 const userStore =create((set,get)=>({
 	user:null,

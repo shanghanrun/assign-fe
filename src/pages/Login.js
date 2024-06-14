@@ -21,9 +21,6 @@ const Login = () => {
     loginWithGoogle(googleData.credential)
   };
 
-	// if(user){  이 부분은 useEffect로 넣어 버렸다.
-	// 	navigate('/')
-	// }
 
   useEffect(() => {
     setError(false)//기존 에러를 초기화
@@ -79,7 +76,7 @@ const Login = () => {
                   console.log('Login Failed');
                 }}
                 useOneTap
-              />;
+              />
             </div>
           </div>
         </Form>

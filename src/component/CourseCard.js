@@ -3,9 +3,8 @@ const CourseCard =()=>{
 	
 	const navigate= useNavigate()
 	return(
-		<div onClick={()=>navigate('/Assign')}>
-
-			<div>CourseCard</div>
+		<div onClick={()=>navigate('/assign')}>
+			<img src="node_study.png" alt=''/>
 		</div>
 	)
 }

@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+.modal-dialog {
+  max-width: 700px;
+}
+.assign-button-area {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.assign-button-area button {
+  margin-left: 20px;
+}
