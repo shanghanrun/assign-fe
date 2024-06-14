@@ -30,7 +30,7 @@ const ReportDialog = ({ assign, open, handleClose }) => {
   const submitForm = (e) => {
     e.preventDefault(); // 이걸 해야 된다!!
     
-    createReport(user._id, assign._id, domain, frontEnd, backEnd, comment);
+    createReport(user, assign._id, domain, frontEnd, backEnd, comment);
     handleClose();
   };
 
