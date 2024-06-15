@@ -10,9 +10,9 @@ import Navbar from './../component/Navbar';
 
 
 const AssignPage=()=>{
-	const {user} = userStore()
-	const {updated, userAssignList, userWeekOne, userWeekTwo, userWeekThree, userWeekFour, getUserAssignList, setSelectedUserAssign,selectedUserAssign} = assignStore()
-	console.log('AssignPage userAssignList :', userAssignList)
+	const {user, updated, weekOne, weekTwo, weekThree, weekFour,getUserAssigns} = userStore()
+	// const {updated, userAssignList, userWeekOne, userWeekTwo, userWeekThree, userWeekFour, getUserAssignList, setSelectedUserAssign,selectedUserAssign} = assignStore()
+	// console.log('AssignPage userAssignList :', userAssignList)
 	const [open, setOpen] = useState(false)
 	const [assignOpen, setAssignOpen] =useState(false)
 	const tableHeader=[
@@ -30,6 +30,7 @@ const AssignPage=()=>{
 	// 이상하게도 여기서 getUserAssignList()하려 하니, user가 빨리 들어오지 않아서 안된다.
 	// 그래서 이전 페이지에서 받아온다.
 	useEffect(()=>{
+		getUserAssigns(user._id) //새로 업데이트된 user정보를 가져와야 된다.
 		console.log('assignOpen상태:', assignOpen)
 	},[assignOpen])
 
@@ -44,7 +45,7 @@ const AssignPage=()=>{
 	const openEditForm = (assign) => {
 		if(user.level === 'customer') return
 		setOpen(true);
-		setSelectedUserAssign(assign)
+		// setSelectedUserAssign(assign)
 	};
 
 	const handleClose = () => {
@@ -68,7 +69,7 @@ const AssignPage=()=>{
 					<h5>1주차</h5>
 					<AssignTable
 						header={tableHeader}
-						data={userWeekOne}
+						data={weekOne}
 						openEditForm={openEditForm}
 					/>
 					<div style={{height: '10px'}}></div>
@@ -77,7 +78,7 @@ const AssignPage=()=>{
 					<h5>2주차</h5>
 					<AssignTable
 						header={tableHeader}
-						data={userWeekTwo}
+						data={weekTwo}
 						openEditForm={openEditForm}
 					/>
 					<div style={{height: '10px'}}></div>
@@ -86,7 +87,7 @@ const AssignPage=()=>{
 					<h5>3주차</h5>
 					<AssignTable
 						header={tableHeader}
-						data={userWeekThree}
+						data={weekThree}
 						openEditForm={openEditForm}
 					/>
 					<div style={{height: '10px'}}></div>
@@ -95,7 +96,7 @@ const AssignPage=()=>{
 					<h5>4주차</h5>
 					<AssignTable
 						header={tableHeader}
-						data={userWeekFour}
+						data={weekFour}
 						openEditForm={openEditForm}
 					/>
 					<div style={{height: '10px'}}></div>

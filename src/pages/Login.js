@@ -6,8 +6,8 @@ import { GoogleLogin } from '@react-oauth/google';
 import assignStore from "../store/assignStore";
 
 const Login = () => {
-  const {user, error, setError, loginWithEmail, loginWithGoogle} = userStore()
-  const {getUserAssignList} = assignStore()
+  const {user, error, setError, loginWithEmail, loginWithGoogle,setUserAssigns} = userStore()
+  const {createUserAssignList, getUserAssignList} = assignStore()
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +27,9 @@ const Login = () => {
   useEffect(() => {
     setError(false)//기존 에러를 초기화
     if (user) {
-      getUserAssignList(user._id)  //아예 여기서 받는다.
+      if(!user.assigns){
+        setUserAssigns(user._id)
+      }
       navigate("/home");
     }
   }, [user]);

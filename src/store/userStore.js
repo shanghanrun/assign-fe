@@ -2,17 +2,94 @@ import {create} from 'zustand'
 import api from '../utils/api'
 
 const userStore =create((set,get)=>({
+	updated:false,
 	user:null,
 	selectedUser:null,
 	error:'',
 	userList:[],
+	userAssigns:[],
+	weekOne:null,
+	weekTwo:null,
+	weekThree:null,
+	weekFour:null,
 	totalUserCount:1,
 	userUpdated:false,
 	
 	setError:(val)=>set({error:val}),
 	setSelectedUser:(user)=>{
 		set({selectedUser: user})},
-	
+	setUserAssigns:async(userId)=>{
+		try{
+			const resp = await api.post('/user/assigns',{userId})
+			console.log(resp.data.message)
+
+			const newUser= resp.data.data;
+			const list =newUser.assigns;
+
+			const weekOne=[], weekTwo=[], weekThree=[], weekFour=[]
+			
+			list.forEach((item)=>{
+				if(item.week ===1){
+					weekOne.push(item)
+				}
+				if(item.week ===2){
+					weekTwo.push(item)
+				}
+				if(item.week ===3){
+					weekThree.push(item)
+				}
+				if(item.week ===4){
+					weekFour.push(item)
+				}
+			})
+			set({
+				user: newUser,
+				updated: !get().updated,
+				weekOne: weekOne,
+				weekTwo: weekTwo,
+				weekThree: weekThree,
+				weekFour: weekFour
+			})
+		}catch(e){
+			console.log(e.error)
+		}
+	},
+	getUserAssigns:async(userId)=>{
+		try{
+			// 업데이트된 user 정보를 다시 불러온다.
+			const resp = await api.get('/user/new/'+userId)
+
+			const newUser= resp.data.data;
+			const list =newUser.assigns;
+
+			const weekOne=[], weekTwo=[], weekThree=[], weekFour=[]
+			
+			list.forEach((item)=>{
+				if(item.week ===1){
+					weekOne.push(item)
+				}
+				if(item.week ===2){
+					weekTwo.push(item)
+				}
+				if(item.week ===3){
+					weekThree.push(item)
+				}
+				if(item.week ===4){
+					weekFour.push(item)
+				}
+			})
+			set({
+				user: newUser,
+				updated: !get().updated,
+				weekOne: weekOne,
+				weekTwo: weekTwo,
+				weekThree: weekThree,
+				weekFour: weekFour
+			})
+		}catch(e){
+			console.log(e.error)
+		}
+	},
 	updateUser:async(userId, level, memo, image,failNo, notSubmitNo)=>{
 		try{
 			const resp = await api.put('/user/update', {userId,level,failNo, notSubmitNo})
