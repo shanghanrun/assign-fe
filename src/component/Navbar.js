@@ -6,7 +6,9 @@ const Navbar =()=>{
 	const {logout} = userStore()
 	const navigate= useNavigate()
 	return(
-		<div>
+		<div style={{display:'flex', justifyContent:'end',
+			marginTop: '20px', marginRight:'50px'
+		}}>
 
 			<Button onClick={()=>logout(navigate)}>로그아웃</Button>
 		</div>

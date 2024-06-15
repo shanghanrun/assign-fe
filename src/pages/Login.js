@@ -3,9 +3,11 @@ import { Container, Form, Button, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import userStore from '../store/userStore'
 import { GoogleLogin } from '@react-oauth/google';
+import assignStore from "../store/assignStore";
 
 const Login = () => {
   const {user, error, setError, loginWithEmail, loginWithGoogle} = userStore()
+  const {getUserAssignList} = assignStore()
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,6 +27,7 @@ const Login = () => {
   useEffect(() => {
     setError(false)//기존 에러를 초기화
     if (user) {
+      getUserAssignList(user._id)  //아예 여기서 받는다.
       navigate("/home");
     }
   }, [user]);

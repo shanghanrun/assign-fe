@@ -6,12 +6,13 @@ import AssignDialog from '../component/AssignDialog';
 import userStore from '../store/userStore'
 import AssignCreateDialog from '../component/AssignCreateDialog';
 import cc from './../utils/cc';
+import Navbar from './../component/Navbar';
 
 
 const AssignPage=()=>{
 	const {user} = userStore()
-	const {updated, assignList, weekOne, weekTwo, weekThree, weekFour, getAssignList, setSelectedAssign,selectedAssign} = assignStore()
-	console.log('AssignPage assignList :', assignList)
+	const {updated, userAssignList, userWeekOne, userWeekTwo, userWeekThree, userWeekFour, getUserAssignList, setSelectedUserAssign,selectedUserAssign} = assignStore()
+	console.log('AssignPage userAssignList :', userAssignList)
 	const [open, setOpen] = useState(false)
 	const [assignOpen, setAssignOpen] =useState(false)
 	const tableHeader=[
@@ -23,9 +24,11 @@ const AssignPage=()=>{
 		'피드백'
 	]
 
-	useEffect(()=>{
-		getAssignList()
-	},[updated])
+	// useEffect(()=>{
+	// 	getUserAssignList(user?._id)
+	// },[updated])
+	// 이상하게도 여기서 getUserAssignList()하려 하니, user가 빨리 들어오지 않아서 안된다.
+	// 그래서 이전 페이지에서 받아온다.
 	useEffect(()=>{
 		console.log('assignOpen상태:', assignOpen)
 	},[assignOpen])
@@ -41,7 +44,7 @@ const AssignPage=()=>{
 	const openEditForm = (assign) => {
 		if(user.level === 'customer') return
 		setOpen(true);
-		setSelectedAssign(assign)
+		setSelectedUserAssign(assign)
 	};
 
 	const handleClose = () => {
@@ -49,8 +52,13 @@ const AssignPage=()=>{
 	};
 	return(
 		<div>
+			<Navbar />
 			<Container>
-				<Button variant="success" onClick={()=>openAssignCreateForm()}>Assign 생성</Button>
+				{(user?.level==='admin') ? <div className="fixed-header">
+					<Container>
+					<Button variant="success" onClick={openAssignCreateForm}>Assign 생성</Button>
+					</Container>
+				</div> : <div></div>}
 
 				{assignOpen && <AssignCreateDialog open={assignOpen} handleClose={handleAssignClose} />}
 				
@@ -60,7 +68,7 @@ const AssignPage=()=>{
 					<h5>1주차</h5>
 					<AssignTable
 						header={tableHeader}
-						data={weekOne}
+						data={userWeekOne}
 						openEditForm={openEditForm}
 					/>
 					<div style={{height: '10px'}}></div>
@@ -69,7 +77,7 @@ const AssignPage=()=>{
 					<h5>2주차</h5>
 					<AssignTable
 						header={tableHeader}
-						data={weekTwo}
+						data={userWeekTwo}
 						openEditForm={openEditForm}
 					/>
 					<div style={{height: '10px'}}></div>
@@ -78,7 +86,7 @@ const AssignPage=()=>{
 					<h5>3주차</h5>
 					<AssignTable
 						header={tableHeader}
-						data={weekThree}
+						data={userWeekThree}
 						openEditForm={openEditForm}
 					/>
 					<div style={{height: '10px'}}></div>
@@ -87,7 +95,7 @@ const AssignPage=()=>{
 					<h5>4주차</h5>
 					<AssignTable
 						header={tableHeader}
-						data={weekFour}
+						data={userWeekFour}
 						openEditForm={openEditForm}
 					/>
 					<div style={{height: '10px'}}></div>

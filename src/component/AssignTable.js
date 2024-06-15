@@ -52,17 +52,18 @@ const AssignTable = ({ header, data, openEditForm }) => {
               return (
                 <tr
                   key={index}
-                  onClick={() => openEditForm(item)}
                   className={rowClassName}
                 >
                   <th className={rowClassName}>{item.dueDate}</th>
                   <th className={rowClassName}>{item.lecture}</th>
                   <th className={rowClassName}>{renderAssignTypeColumn(item.assignType)}</th>
                   <th className={rowClassName}>{item.status}</th>
-                  <th className={rowClassName}
+                  <th className={`${rowClassName} submit-button`}
                     onClick={handleShowReport}
                   >{renderSubmitColumn(item.submit)}</th>
-                  <th className={rowClassName}>{item.feedback}</th>
+                  <th className={rowClassName}
+                    onClick={() => openEditForm(item)}
+                  >{item.feedback}</th>
                   {showReport && <ReportDialog
                     assign={item} 
                     open={showReport} handleClose={handleCloseReport}/>}

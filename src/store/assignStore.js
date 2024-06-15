@@ -4,10 +4,15 @@ import api from './../utils/api';
 const assignStore = create((set,get)=>({
 	updated:false,
 	assignList:null,
+	userAssignList:null,
 	weekOne:null,
 	weekTwo:null,
 	weekThree:null,
 	weekFour:null,
+	userWeekOne:null,
+	userWeekTwo:null,
+	userWeekThree:null,
+	userWeekFour:null,
 	selectedAssign:null,
 	createAssign:async(week,dueDate,lecture,assignType,status,submit,feedback)=>{
 		try{
@@ -46,11 +51,54 @@ const assignStore = create((set,get)=>({
 				weekThree: weekThree,
 				weekFour: weekFour
 			})
+			set({updated: !get().updated})
 		}catch(e){
 			console.log(e.error)
 		}
 	},
-	createUserAssignList:async()=>{
+	createUserAssignList:async(userId)=>{
+		try{
+			console.log('create에서 userId', userId)
+			const resp = await api.post('/user-assign', {userId})
+			const message = resp.data.message
+			console.log(message)
+			set({updated: !get().updated})
+		}catch(e){
+			console.log(e.error)
+		}
+	},
+	getUserAssignList:async(userId)=>{
+		try{
+			const resp = await api.post('/user-assign/list', {userId})
+			console.log('받은 userAssignList data:', resp.data.data)
+			const list = [...resp.data.data]
+			const userWeekOne=[], userWeekTwo=[], userWeekThree=[], userWeekFour=[]
+			
+			list.forEach((item)=>{
+				if(item.week ===1){
+					userWeekOne.push(item)
+				}
+				if(item.week ===2){
+					userWeekTwo.push(item)
+				}
+				if(item.week ===3){
+					userWeekThree.push(item)
+				}
+				if(item.week ===4){
+					userWeekFour.push(item)
+				}
+			})
+			set({
+				userAssignList: resp.data.data,
+				userWeekOne: userWeekOne,
+				userWeekTwo: userWeekTwo,
+				userWeekThree: userWeekThree,
+				userWeekFour: userWeekFour,
+				updated: !get().updated
+			})
+		}catch(e){
+
+		}
 	},
 	setSelectedAssign:(val)=>set({selectedAssign: val}),
 	updateAssign:async(assignId,week,dueDate,lecture,assignType,status, submit, feedback, reportId)=>{

@@ -55,3 +55,28 @@
 .bg-yellow{
   background-color: yellow !important;
 }
+
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left:500px;
+  width: 135px;
+  z-index: 1000;
+  /* Ensure it stays on top */
+  /* background-color: white; */
+  /* Optional: to ensure it's visible against the content */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* Optional: adds a shadow for better visibility */
+  padding: 10px 0;
+  /* Optional: add some padding */
+}
+
+.fixed-header Container {
+  display: flex;
+  justify-content: space-between;
+  /* Optional: adjust as needed */
+}
+
+.submit-button{
+  z-index: 1000
+}
